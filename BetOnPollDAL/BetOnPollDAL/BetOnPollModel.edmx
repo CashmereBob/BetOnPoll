@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="BetOnPollModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="BetOnPollModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="tbl_AnswerHistory">
           <Key>
             <PropertyRef Name="ID" />
@@ -74,7 +74,7 @@
           <Property Name="Age" Type="nvarchar" MaxLength="30" Nullable="false" />
           <Property Name="Social" Type="nvarchar" MaxLength="30" Nullable="false" />
           <Property Name="Kids" Type="nvarchar" MaxLength="30" />
-          <Property Name="Tenns" Type="nvarchar" MaxLength="30" />
+          <Property Name="Teens" Type="nvarchar" MaxLength="30" />
           <Property Name="Occupation" Type="nvarchar" MaxLength="30" Nullable="false" />
           <Property Name="Income" Type="nvarchar" MaxLength="30" />
           <Property Name="Sex" Type="nvarchar" MaxLength="30" Nullable="false" />
@@ -332,8 +332,7 @@ warning 6002: The table/view 'BetOnPoll.sys.database_firewall_rules' does not ha
             <End Role="tbl_User" EntitySet="tbl_User" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="BetOnPollModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -422,12 +421,12 @@ warning 6002: The table/view 'BetOnPoll.sys.database_firewall_rules' does not ha
           <Property Name="Age" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Social" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Kids" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Name="Tenns" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
           <Property Name="Occupation" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Income" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
           <Property Name="Sex" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="tbl_PollAnswer_Statistics" Relationship="Self.FK_PollAnswer_Statistics_Statistics" FromRole="tbl_Statistics" ToRole="tbl_PollAnswer_Statistics" />
           <NavigationProperty Name="tbl_User" Relationship="Self.FK_User_Statistics" FromRole="tbl_Statistics" ToRole="tbl_User" />
+          <Property Name="Teens" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="tbl_User">
           <Key>
@@ -751,11 +750,11 @@ warning 6002: The table/view 'BetOnPoll.sys.database_firewall_rules' does not ha
           <EntitySetMapping Name="tbl_Statistics">
             <EntityTypeMapping TypeName="BetOnPollModel.tbl_Statistics">
               <MappingFragment StoreEntitySet="tbl_Statistics">
+                <ScalarProperty Name="Teens" ColumnName="Teens" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Age" ColumnName="Age" />
                 <ScalarProperty Name="Social" ColumnName="Social" />
                 <ScalarProperty Name="Kids" ColumnName="Kids" />
-                <ScalarProperty Name="Tenns" ColumnName="Tenns" />
                 <ScalarProperty Name="Occupation" ColumnName="Occupation" />
                 <ScalarProperty Name="Income" ColumnName="Income" />
                 <ScalarProperty Name="Sex" ColumnName="Sex" />
