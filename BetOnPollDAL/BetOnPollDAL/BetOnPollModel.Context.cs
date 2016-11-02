@@ -13,10 +13,10 @@ namespace BetOnPollDAL
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class BetOnPollDALEntities : DbContext
+    public partial class BetOnPollEntities : DbContext
     {
-        public BetOnPollDALEntities()
-            : base("name=BetOnPollDALEntities")
+        public BetOnPollEntities()
+            : base("name=BetOnPollEntities")
         {
         }
     
@@ -25,6 +25,7 @@ namespace BetOnPollDAL
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<tbl_Adress> tbl_Adress { get; set; }
         public virtual DbSet<tbl_AnswerHistory> tbl_AnswerHistory { get; set; }
         public virtual DbSet<tbl_Bet> tbl_Bet { get; set; }
         public virtual DbSet<tbl_Category> tbl_Category { get; set; }
@@ -34,7 +35,5 @@ namespace BetOnPollDAL
         public virtual DbSet<tbl_Score> tbl_Score { get; set; }
         public virtual DbSet<tbl_Statistics> tbl_Statistics { get; set; }
         public virtual DbSet<tbl_User> tbl_User { get; set; }
-        public virtual DbSet<database_firewall_rules> database_firewall_rules { get; set; }
-        public virtual DbSet<tbl_Adress> tbl_Adress { get; set; }
     }
 }

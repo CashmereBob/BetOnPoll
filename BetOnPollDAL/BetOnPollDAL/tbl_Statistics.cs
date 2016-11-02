@@ -26,10 +26,10 @@ namespace BetOnPollDAL
         public string Age { get; set; }
         public string Social { get; set; }
         public string Kids { get; set; }
+        public string Teens { get; set; }
         public string Occupation { get; set; }
         public string Income { get; set; }
         public string Sex { get; set; }
-        public string Teens { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tbl_PollAnswer_Statistics> tbl_PollAnswer_Statistics { get; set; }
