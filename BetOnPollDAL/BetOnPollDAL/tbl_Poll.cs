@@ -19,6 +19,8 @@ namespace BetOnPollDAL
         {
             this.tbl_AnswerHistory = new HashSet<tbl_AnswerHistory>();
             this.tbl_PollAnswer = new HashSet<tbl_PollAnswer>();
+            this.tbl_Adress = new HashSet<tbl_Adress>();
+            this.tbl_Statistics = new HashSet<tbl_Statistics>();
         }
     
         public int ID { get; set; }
@@ -32,5 +34,9 @@ namespace BetOnPollDAL
         public virtual tbl_Category tbl_Category { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tbl_PollAnswer> tbl_PollAnswer { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tbl_Adress> tbl_Adress { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tbl_Statistics> tbl_Statistics { get; set; }
     }
 }

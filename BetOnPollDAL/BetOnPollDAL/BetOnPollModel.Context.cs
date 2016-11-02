@@ -35,5 +35,6 @@ namespace BetOnPollDAL
         public virtual DbSet<tbl_Statistics> tbl_Statistics { get; set; }
         public virtual DbSet<tbl_User> tbl_User { get; set; }
         public virtual DbSet<database_firewall_rules> database_firewall_rules { get; set; }
+        public virtual DbSet<tbl_Adress> tbl_Adress { get; set; }
     }
 }

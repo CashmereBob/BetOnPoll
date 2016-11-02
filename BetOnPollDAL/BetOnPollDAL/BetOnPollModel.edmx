@@ -5,6 +5,15 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="BetOnPollModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="tbl_Adress">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="City" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Postalcode" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="StreetAdress" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
         <EntityType Name="tbl_AnswerHistory">
           <Key>
             <PropertyRef Name="ID" />
@@ -39,6 +48,22 @@
           <Property Name="Description" Type="nvarchar(max)" Nullable="false" />
           <Property Name="CategoryID" Type="int" Nullable="false" />
           <Property Name="PublishDate" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tbl_Poll_Adress">
+          <Key>
+            <PropertyRef Name="PollID" />
+            <PropertyRef Name="AdressID" />
+          </Key>
+          <Property Name="PollID" Type="int" Nullable="false" />
+          <Property Name="AdressID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tbl_Poll_Statistics">
+          <Key>
+            <PropertyRef Name="PollID" />
+            <PropertyRef Name="StatisticsID" />
+          </Key>
+          <Property Name="PollID" Type="int" Nullable="false" />
+          <Property Name="StatisticsID" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="tbl_PollAnswer">
           <Key>
@@ -86,14 +111,13 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="FirstName" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="LastName" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="Adress" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="Postalcode" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Telephone" Type="nvarchar" MaxLength="50" />
           <Property Name="Email" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="UserName" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="StatisticsID" Type="int" Nullable="false" />
           <Property Name="Password" Type="nvarchar(max)" Nullable="false" />
           <Property Name="Salt" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="AdressID" Type="int" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'BetOnPoll.sys.database_firewall_rules' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -169,6 +193,34 @@ warning 6002: The table/view 'BetOnPoll.sys.database_firewall_rules' does not ha
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Poll_Adress_Adress">
+          <End Role="tbl_Adress" Type="Self.tbl_Adress" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="tbl_Poll_Adress" Type="Self.tbl_Poll_Adress" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_Adress">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="tbl_Poll_Adress">
+              <PropertyRef Name="AdressID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Poll_Adress_Poll">
+          <End Role="tbl_Poll" Type="Self.tbl_Poll" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="tbl_Poll_Adress" Type="Self.tbl_Poll_Adress" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_Poll">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="tbl_Poll_Adress">
+              <PropertyRef Name="PollID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Poll_Category">
           <End Role="tbl_Category" Type="Self.tbl_Category" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -180,6 +232,34 @@ warning 6002: The table/view 'BetOnPoll.sys.database_firewall_rules' does not ha
             </Principal>
             <Dependent Role="tbl_Poll">
               <PropertyRef Name="CategoryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Poll_Statistics_Poll">
+          <End Role="tbl_Poll" Type="Self.tbl_Poll" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="tbl_Poll_Statistics" Type="Self.tbl_Poll_Statistics" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_Poll">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="tbl_Poll_Statistics">
+              <PropertyRef Name="PollID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Poll_Statistics_Statistics">
+          <End Role="tbl_Statistics" Type="Self.tbl_Statistics" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="tbl_Poll_Statistics" Type="Self.tbl_Poll_Statistics" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_Statistics">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="tbl_Poll_Statistics">
+              <PropertyRef Name="StatisticsID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -253,6 +333,20 @@ warning 6002: The table/view 'BetOnPoll.sys.database_firewall_rules' does not ha
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_User_Adress">
+          <End Role="tbl_Adress" Type="Self.tbl_Adress" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="tbl_User" Type="Self.tbl_User" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_Adress">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="tbl_User">
+              <PropertyRef Name="AdressID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_User_Statistics">
           <End Role="tbl_Statistics" Type="Self.tbl_Statistics" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -268,10 +362,13 @@ warning 6002: The table/view 'BetOnPoll.sys.database_firewall_rules' does not ha
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="BetOnPollModelStoreContainer">
+          <EntitySet Name="tbl_Adress" EntityType="Self.tbl_Adress" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tbl_AnswerHistory" EntityType="Self.tbl_AnswerHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tbl_Bet" EntityType="Self.tbl_Bet" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tbl_Category" EntityType="Self.tbl_Category" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tbl_Poll" EntityType="Self.tbl_Poll" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_Poll_Adress" EntityType="Self.tbl_Poll_Adress" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_Poll_Statistics" EntityType="Self.tbl_Poll_Statistics" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tbl_PollAnswer" EntityType="Self.tbl_PollAnswer" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tbl_PollAnswer_Statistics" EntityType="Self.tbl_PollAnswer_Statistics" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tbl_Score" EntityType="Self.tbl_Score" Schema="dbo" store:Type="Tables" />
@@ -303,9 +400,25 @@ warning 6002: The table/view 'BetOnPoll.sys.database_firewall_rules' does not ha
             <End Role="tbl_User" EntitySet="tbl_User" />
             <End Role="tbl_Bet" EntitySet="tbl_Bet" />
           </AssociationSet>
+          <AssociationSet Name="FK_Poll_Adress_Adress" Association="Self.FK_Poll_Adress_Adress">
+            <End Role="tbl_Adress" EntitySet="tbl_Adress" />
+            <End Role="tbl_Poll_Adress" EntitySet="tbl_Poll_Adress" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Poll_Adress_Poll" Association="Self.FK_Poll_Adress_Poll">
+            <End Role="tbl_Poll" EntitySet="tbl_Poll" />
+            <End Role="tbl_Poll_Adress" EntitySet="tbl_Poll_Adress" />
+          </AssociationSet>
           <AssociationSet Name="FK_Poll_Category" Association="Self.FK_Poll_Category">
             <End Role="tbl_Category" EntitySet="tbl_Category" />
             <End Role="tbl_Poll" EntitySet="tbl_Poll" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Poll_Statistics_Poll" Association="Self.FK_Poll_Statistics_Poll">
+            <End Role="tbl_Poll" EntitySet="tbl_Poll" />
+            <End Role="tbl_Poll_Statistics" EntitySet="tbl_Poll_Statistics" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Poll_Statistics_Statistics" Association="Self.FK_Poll_Statistics_Statistics">
+            <End Role="tbl_Statistics" EntitySet="tbl_Statistics" />
+            <End Role="tbl_Poll_Statistics" EntitySet="tbl_Poll_Statistics" />
           </AssociationSet>
           <AssociationSet Name="FK_PollAnswer_Poll" Association="Self.FK_PollAnswer_Poll">
             <End Role="tbl_Poll" EntitySet="tbl_Poll" />
@@ -326,6 +439,10 @@ warning 6002: The table/view 'BetOnPoll.sys.database_firewall_rules' does not ha
           <AssociationSet Name="FK_Score_User" Association="Self.FK_Score_User">
             <End Role="tbl_User" EntitySet="tbl_User" />
             <End Role="tbl_Score" EntitySet="tbl_Score" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_Adress" Association="Self.FK_User_Adress">
+            <End Role="tbl_Adress" EntitySet="tbl_Adress" />
+            <End Role="tbl_User" EntitySet="tbl_User" />
           </AssociationSet>
           <AssociationSet Name="FK_User_Statistics" Association="Self.FK_User_Statistics">
             <End Role="tbl_Statistics" EntitySet="tbl_Statistics" />
@@ -379,6 +496,8 @@ warning 6002: The table/view 'BetOnPoll.sys.database_firewall_rules' does not ha
           <NavigationProperty Name="tbl_AnswerHistory" Relationship="Self.FK_AnswerHistory_Poll" FromRole="tbl_Poll" ToRole="tbl_AnswerHistory" />
           <NavigationProperty Name="tbl_Category" Relationship="Self.FK_Poll_Category" FromRole="tbl_Poll" ToRole="tbl_Category" />
           <NavigationProperty Name="tbl_PollAnswer" Relationship="Self.FK_PollAnswer_Poll" FromRole="tbl_Poll" ToRole="tbl_PollAnswer" />
+          <NavigationProperty Name="tbl_Adress" Relationship="BetOnPollModel.tbl_Poll_Adress" FromRole="tbl_Poll" ToRole="tbl_Adress" />
+          <NavigationProperty Name="tbl_Statistics" Relationship="BetOnPollModel.tbl_Poll_Statistics" FromRole="tbl_Poll" ToRole="tbl_Statistics" />
         </EntityType>
         <EntityType Name="tbl_PollAnswer">
           <Key>
@@ -427,6 +546,7 @@ warning 6002: The table/view 'BetOnPoll.sys.database_firewall_rules' does not ha
           <NavigationProperty Name="tbl_PollAnswer_Statistics" Relationship="Self.FK_PollAnswer_Statistics_Statistics" FromRole="tbl_Statistics" ToRole="tbl_PollAnswer_Statistics" />
           <NavigationProperty Name="tbl_User" Relationship="Self.FK_User_Statistics" FromRole="tbl_Statistics" ToRole="tbl_User" />
           <Property Name="Teens" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="tbl_Poll" Relationship="BetOnPollModel.tbl_Poll_Statistics" FromRole="tbl_Statistics" ToRole="tbl_Poll" />
         </EntityType>
         <EntityType Name="tbl_User">
           <Key>
@@ -435,8 +555,6 @@ warning 6002: The table/view 'BetOnPoll.sys.database_firewall_rules' does not ha
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Adress" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Postalcode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Telephone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="UserName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
@@ -447,6 +565,8 @@ warning 6002: The table/view 'BetOnPoll.sys.database_firewall_rules' does not ha
           <NavigationProperty Name="tbl_Bet" Relationship="Self.FK_Bet_User" FromRole="tbl_User" ToRole="tbl_Bet" />
           <NavigationProperty Name="tbl_Score" Relationship="Self.FK_Score_User" FromRole="tbl_User" ToRole="tbl_Score" />
           <NavigationProperty Name="tbl_Statistics" Relationship="Self.FK_User_Statistics" FromRole="tbl_User" ToRole="tbl_Statistics" />
+          <Property Name="AdressID" Type="Int32" />
+          <NavigationProperty Name="tbl_Adress" Relationship="BetOnPollModel.FK_User_Adress" FromRole="tbl_User" ToRole="tbl_Adress" />
         </EntityType>
         <EntityType Name="database_firewall_rules">
           <Key>
@@ -673,7 +793,53 @@ warning 6002: The table/view 'BetOnPoll.sys.database_firewall_rules' does not ha
             <End Role="tbl_Statistics" EntitySet="tbl_Statistics" />
             <End Role="tbl_User" EntitySet="tbl_User" />
           </AssociationSet>
+          <EntitySet Name="tbl_Adress" EntityType="BetOnPollModel.tbl_Adress" />
+          <AssociationSet Name="FK_User_Adress" Association="BetOnPollModel.FK_User_Adress">
+            <End Role="tbl_Adress" EntitySet="tbl_Adress" />
+            <End Role="tbl_User" EntitySet="tbl_User" />
+          </AssociationSet>
+          <AssociationSet Name="tbl_Poll_Adress" Association="BetOnPollModel.tbl_Poll_Adress">
+            <End Role="tbl_Adress" EntitySet="tbl_Adress" />
+            <End Role="tbl_Poll" EntitySet="tbl_Poll" />
+          </AssociationSet>
+          <AssociationSet Name="tbl_Poll_Statistics" Association="BetOnPollModel.tbl_Poll_Statistics">
+            <End Role="tbl_Poll" EntitySet="tbl_Poll" />
+            <End Role="tbl_Statistics" EntitySet="tbl_Statistics" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="tbl_Adress">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="City" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Postalcode" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="StreetAdress" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="tbl_User" Relationship="BetOnPollModel.FK_User_Adress" FromRole="tbl_Adress" ToRole="tbl_User" />
+          <NavigationProperty Name="tbl_Poll" Relationship="BetOnPollModel.tbl_Poll_Adress" FromRole="tbl_Adress" ToRole="tbl_Poll" />
+        </EntityType>
+        <Association Name="FK_User_Adress">
+          <End Type="BetOnPollModel.tbl_Adress" Role="tbl_Adress" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="BetOnPollModel.tbl_User" Role="tbl_User" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_Adress">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="tbl_User">
+              <PropertyRef Name="AdressID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="tbl_Poll_Adress">
+          <End Type="BetOnPollModel.tbl_Adress" Role="tbl_Adress" Multiplicity="*" />
+          <End Type="BetOnPollModel.tbl_Poll" Role="tbl_Poll" Multiplicity="*" />
+        </Association>
+        <Association Name="tbl_Poll_Statistics">
+          <End Type="BetOnPollModel.tbl_Poll" Role="tbl_Poll" Multiplicity="*" />
+          <End Type="BetOnPollModel.tbl_Statistics" Role="tbl_Statistics" Multiplicity="*" />
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -764,11 +930,10 @@ warning 6002: The table/view 'BetOnPoll.sys.database_firewall_rules' does not ha
           <EntitySetMapping Name="tbl_User">
             <EntityTypeMapping TypeName="BetOnPollModel.tbl_User">
               <MappingFragment StoreEntitySet="tbl_User">
+                <ScalarProperty Name="AdressID" ColumnName="AdressID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="FirstName" ColumnName="FirstName" />
                 <ScalarProperty Name="LastName" ColumnName="LastName" />
-                <ScalarProperty Name="Adress" ColumnName="Adress" />
-                <ScalarProperty Name="Postalcode" ColumnName="Postalcode" />
                 <ScalarProperty Name="Telephone" ColumnName="Telephone" />
                 <ScalarProperty Name="Email" ColumnName="Email" />
                 <ScalarProperty Name="UserName" ColumnName="UserName" />
@@ -790,6 +955,32 @@ warning 6002: The table/view 'BetOnPoll.sys.database_firewall_rules' does not ha
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="tbl_Adress">
+            <EntityTypeMapping TypeName="BetOnPollModel.tbl_Adress">
+              <MappingFragment StoreEntitySet="tbl_Adress">
+                <ScalarProperty Name="StreetAdress" ColumnName="StreetAdress" />
+                <ScalarProperty Name="Postalcode" ColumnName="Postalcode" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="tbl_Poll_Adress" TypeName="BetOnPollModel.tbl_Poll_Adress" StoreEntitySet="tbl_Poll_Adress">
+            <EndProperty Name="tbl_Poll">
+              <ScalarProperty Name="ID" ColumnName="PollID" />
+            </EndProperty>
+            <EndProperty Name="tbl_Adress">
+              <ScalarProperty Name="ID" ColumnName="AdressID" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="tbl_Poll_Statistics" TypeName="BetOnPollModel.tbl_Poll_Statistics" StoreEntitySet="tbl_Poll_Statistics">
+            <EndProperty Name="tbl_Statistics">
+              <ScalarProperty Name="ID" ColumnName="StatisticsID" />
+            </EndProperty>
+            <EndProperty Name="tbl_Poll">
+              <ScalarProperty Name="ID" ColumnName="PollID" />
+            </EndProperty>
+          </AssociationSetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

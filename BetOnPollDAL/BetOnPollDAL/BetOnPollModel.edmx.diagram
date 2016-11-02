@@ -26,6 +26,10 @@
         <AssociationConnector Association="BetOnPollModel.FK_PollAnswer_Statistics_Statistics" ManuallyRouted="false" />
         <AssociationConnector Association="BetOnPollModel.FK_Score_User" ManuallyRouted="false" />
         <AssociationConnector Association="BetOnPollModel.FK_User_Statistics" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="BetOnPollModel.tbl_Adress" Width="1.5" PointX="0.75" PointY="9.375" />
+        <AssociationConnector Association="BetOnPollModel.FK_User_Adress" />
+        <AssociationConnector Association="BetOnPollModel.tbl_Poll_Adress" />
+        <AssociationConnector Association="BetOnPollModel.tbl_Poll_Statistics" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -25,14 +25,13 @@ namespace BetOnPollDAL
         public int ID { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public string Adress { get; set; }
-        public string Postalcode { get; set; }
         public string Telephone { get; set; }
         public string Email { get; set; }
         public string UserName { get; set; }
         public int StatisticsID { get; set; }
         public string Password { get; set; }
         public string Salt { get; set; }
+        public Nullable<int> AdressID { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tbl_AnswerHistory> tbl_AnswerHistory { get; set; }
@@ -41,5 +40,6 @@ namespace BetOnPollDAL
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tbl_Score> tbl_Score { get; set; }
         public virtual tbl_Statistics tbl_Statistics { get; set; }
+        public virtual tbl_Adress tbl_Adress { get; set; }
     }
 }
